@@ -1,0 +1,1 @@
+incident_id,start_timestamp,end_timestamp,duration_seconds,status,severity,trigger_reason,peak_latency_ms,peak_jitter_ms,peak_packet_loss_percent,peak_utilization_percent,min_health_score,min_stability_score,diagnosis_summary,is_simulation

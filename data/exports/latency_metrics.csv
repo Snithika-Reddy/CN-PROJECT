@@ -1,0 +1,7 @@
+timestamp,target_name,target_host,probes_sent,probes_received,packet_loss_percent,latency_min_ms,latency_avg_ms,latency_max_ms,jitter_ms,status
+2026-09-30T09:00:54.747901+00:00,gateway,192.168.11.3,5,5,0.0,2.0,2.0,5.0,1.75,OK: 5/5 received
+2026-09-30T09:00:58.843813+00:00,google_dns,8.8.8.8,5,5,0.0,17.0,18.0,20.0,1.75,OK: 5/5 received
+2026-09-30T09:17:59.926973+00:00,gateway,192.168.11.3,5,5,0.0,2.0,2.0,3.0,0.5,OK: 5/5 received
+2026-09-30T09:18:04.032067+00:00,google_dns,8.8.8.8,5,5,0.0,17.0,33.0,46.0,18.75,OK: 5/5 received
+2026-09-30T09:18:42.176491+00:00,gateway,192.168.11.3,5,5,0.0,2.0,2.0,5.0,0.75,OK: 5/5 received
+2026-09-30T09:18:46.255816+00:00,google_dns,8.8.8.8,5,5,0.0,17.0,17.0,18.0,0.5,OK: 5/5 received

@@ -1,0 +1,221 @@
+// ==============================================================================
+// NetIntel Power BI DAX Measures Library
+// Authoritative Analytical Metric Formulas for Star Schema Relational Model
+// ==============================================================================
+
+// ------------------------------------------------------------------------------
+// 1. NETWORK HEALTH & STABILITY MEASURES
+// ------------------------------------------------------------------------------
+
+AvgHealthScore = 
+    AVERAGE(FactNetworkMetrics[health_score])
+
+MinHealthScore = 
+    MIN(FactNetworkMetrics[health_score])
+
+CurrentHealthScore = 
+    CALCULATE(
+        LASTNONBLANKVALUE(FactNetworkMetrics[timestamp], AVERAGE(FactNetworkMetrics[health_score]))
+    )
+
+AvgStabilityScore = 
+    AVERAGE(FactNetworkMetrics[stability_score])
+
+SystemStabilityIndex = 
+    ( [AvgHealthScore] * 0.60 ) + ( [AvgStabilityScore] * 0.40 )
+
+// Dynamic Status text based on Health Score
+HealthStatusText = 
+    SWITCH(
+        TRUE(),
+        [AvgHealthScore] >= 90.0, "OPTIMAL HEALTH",
+        [AvgHealthScore] >= 75.0, "MINOR DEGRADATION",
+        [AvgHealthScore] >= 50.0, "WARNING / UNSTABLE",
+        "CRITICAL OUTAGE"
+    )
+
+// Dynamic Color Hex code for Conditional Formatting of Cards & KPIs
+HealthScoreColorHex = 
+    SWITCH(
+        TRUE(),
+        [AvgHealthScore] >= 90.0, "#10B981", // Emerald Green
+        [AvgHealthScore] >= 75.0, "#71C9CE", // Brand Cyan
+        [AvgHealthScore] >= 50.0, "#F59E0B", // Amber Warning
+        "#EF4444"                            // Red Alert
+    )
+
+
+// ------------------------------------------------------------------------------
+// 2. LATENCY, JITTER & TAIL-BOUND SLA COMPLIANCE
+// ------------------------------------------------------------------------------
+
+AvgLatencyMs = 
+    AVERAGE(FactNetworkMetrics[latency_ms])
+
+MedianLatencyMs = 
+    MEDIAN(FactNetworkMetrics[latency_ms])
+
+// 95th Percentile Tail Latency (Essential for Enterprise SLAs)
+P95_LatencyMs = 
+    PERCENTILE.INC(FactNetworkMetrics[latency_ms], 0.95)
+
+// 99th Percentile Worst-Case Latency Bound
+P99_LatencyMs = 
+    PERCENTILE.INC(FactNetworkMetrics[latency_ms], 0.99)
+
+AvgJitterMs = 
+    AVERAGE(FactNetworkMetrics[jitter_ms])
+
+P95_JitterMs = 
+    PERCENTILE.INC(FactNetworkMetrics[jitter_ms], 0.95)
+
+AvgPacketLossPct = 
+    AVERAGE(FactNetworkMetrics[packet_loss_pct])
+
+// Latency SLA Compliance Rate (< 50ms)
+LatencySLACompliancePct = 
+    DIVIDE(
+        COUNTROWS(FILTER(FactNetworkMetrics, FactNetworkMetrics[latency_ms] <= 50.0)),
+        COUNTROWS(FactNetworkMetrics),
+        0
+    ) * 100
+
+// Zero-Loss Availability SLA Rate (Samples with 0% Packet Loss)
+ZeroLossAvailabilityPct = 
+    DIVIDE(
+        COUNTROWS(FILTER(FactNetworkMetrics, FactNetworkMetrics[packet_loss_pct] = 0.0)),
+        COUNTROWS(FactNetworkMetrics),
+        0
+    ) * 100
+
+// Combined Enterprise SLA Compliance Rate (Latency <= 50ms AND Loss <= 1%)
+EnterpriseSLACompliancePct = 
+    DIVIDE(
+        COUNTROWS(
+            FILTER(
+                FactNetworkMetrics,
+                FactNetworkMetrics[latency_ms] <= 50.0 && FactNetworkMetrics[packet_loss_pct] <= 1.0
+            )
+        ),
+        COUNTROWS(FactNetworkMetrics),
+        0
+    ) * 100
+
+
+// ------------------------------------------------------------------------------
+// 3. THROUGHPUT & CAPACITY UTILIZATION
+// ------------------------------------------------------------------------------
+
+AvgDownloadMbps = 
+    AVERAGE(FactNetworkMetrics[download_mbps])
+
+AvgUploadMbps = 
+    AVERAGE(FactNetworkMetrics[upload_mbps])
+
+PeakDownloadMbps = 
+    MAX(FactNetworkMetrics[download_mbps])
+
+PeakUploadMbps = 
+    MAX(FactNetworkMetrics[upload_mbps])
+
+TotalDataTransferredMB = 
+    DIVIDE(
+        SUM(FactNetworkMetrics[bytes_sent]) + SUM(FactNetworkMetrics[bytes_recv]),
+        1048576,
+        0
+    )
+
+TotalDataTransferredGB = 
+    DIVIDE([TotalDataTransferredMB], 1024, 0)
+
+AvgInterfaceUtilizationPct = 
+    AVERAGE(FactNetworkMetrics[estimated_utilization_pct])
+
+TotalPacketsPerSec = 
+    AVERAGE(FactNetworkMetrics[packets_sent_per_sec]) + AVERAGE(FactNetworkMetrics[packets_recv_per_sec])
+
+
+// ------------------------------------------------------------------------------
+// 4. INCIDENT & ANOMALY INTELLIGENCE
+// ------------------------------------------------------------------------------
+
+TotalIncidentsRecorded = 
+    COUNTROWS(FactIncidents)
+
+ActiveIncidentsCount = 
+    CALCULATE(
+        COUNTROWS(FactIncidents),
+        FactIncidents[status] = "OPEN" || FactIncidents[status] = "RECOVERING"
+    )
+
+CriticalIncidentsCount = 
+    CALCULATE(
+        COUNTROWS(FactIncidents),
+        FactIncidents[severity] = "CRITICAL"
+    )
+
+// Mean Time to Recovery (MTTR) in Seconds
+MeanTimeToRecoverySec = 
+    CALCULATE(
+        AVERAGE(FactIncidents[duration_seconds]),
+        FactIncidents[status] = "RESOLVED"
+    )
+
+TotalAnomaliesDetected = 
+    COUNTROWS(FactAnomalies)
+
+MLDetectedAnomaliesCount = 
+    CALCULATE(
+        COUNTROWS(FactAnomalies),
+        FactAnomalies[detection_method] = "ISOLATION_FOREST"
+    )
+
+StatisticalAnomaliesCount = 
+    CALCULATE(
+        COUNTROWS(FactAnomalies),
+        FactAnomalies[detection_method] = "Z-SCORE" || FactAnomalies[detection_method] = "IQR"
+    )
+
+
+// ------------------------------------------------------------------------------
+// 5. APPLICATION EXPERIENCE & QoS READINESS
+// ------------------------------------------------------------------------------
+
+VideoCallReadinessPct = 
+    DIVIDE(
+        COUNTROWS(
+            FILTER(
+                FactApplicationExperience,
+                FactApplicationExperience[video_call_score] = "EXCELLENT" || 
+                FactApplicationExperience[video_call_score] = "GOOD"
+            )
+        ),
+        COUNTROWS(FactApplicationExperience),
+        0
+    ) * 100
+
+GamingReadinessPct = 
+    DIVIDE(
+        COUNTROWS(
+            FILTER(
+                FactApplicationExperience,
+                FactApplicationExperience[gaming_score] = "EXCELLENT" || 
+                FactApplicationExperience[gaming_score] = "GOOD"
+            )
+        ),
+        COUNTROWS(FactApplicationExperience),
+        0
+    ) * 100
+
+WebBrowsingReadinessPct = 
+    DIVIDE(
+        COUNTROWS(
+            FILTER(
+                FactApplicationExperience,
+                FactApplicationExperience[web_browsing_score] = "EXCELLENT" || 
+                FactApplicationExperience[web_browsing_score] = "GOOD"
+            )
+        ),
+        COUNTROWS(FactApplicationExperience),
+        0
+    ) * 100

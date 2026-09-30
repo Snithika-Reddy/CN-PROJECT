@@ -1,0 +1,35 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.env
+.venv/
+venv/
+ENV/
+env/
+
+# Database & Runtime Data
+database/*.db
+database/*.sqlite3
+data/raw/*
+!data/raw/.gitkeep
+logs/*.log
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Streamlit runtime
+.streamlit/
+
+# Testing
+.pytest_cache/

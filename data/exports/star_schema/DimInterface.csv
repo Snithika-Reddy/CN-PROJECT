@@ -1,0 +1,2 @@
+interface_id,name,ip_address,mac_address,speed_mbps,is_up,is_wireless,is_loopback,first_seen_timestamp,last_updated_timestamp,interface_name
+1,Wi-Fi,192.168.11.110,2C-98-11-4E-DE-5F,866.0,1,1,0,2026-09-30T09:00:24.408544+00:00,2026-09-30T09:14:05.993142+00:00,Wi-Fi

@@ -1,0 +1,179 @@
+# ==============================================================================
+# NetIntel: Real-Time Network Intelligence Platform Configuration
+# ==============================================================================
+
+app:
+  name: "NetIntel"
+  version: "1.0.0"
+  environment: "production"
+  log_level: "INFO"
+  log_file: "logs/netintel.log"
+
+# Interface Selection
+# mode: 'auto' (detects active interface with outbound traffic) or 'manual'
+interface:
+  mode: "auto"
+  manual_name: ""
+  exclude_loopback: true
+  exclude_virtual: false
+
+# Data Collection & Polling
+collection:
+  default_interval_sec: 2.0
+  adaptive_enabled: true
+  adaptive_intervals:
+    normal: 2.0
+    warning: 1.0
+    critical: 0.5
+    recovery: 1.5
+  sample_buffer_size: 500
+
+# Multi-Target Latency & Packet Loss
+probes:
+  ping_count: 5
+  timeout_ms: 1000
+  targets:
+    - name: "gateway"
+      host: "gateway"  # auto-detected default gateway
+      description: "Local Default Gateway"
+    - name: "google_dns"
+      host: "8.8.8.8"
+      description: "Google Public DNS"
+    - name: "cloudflare_dns"
+      host: "1.1.1.1"
+      description: "Cloudflare Public DNS"
+
+# Operational Thresholds
+thresholds:
+  latency_ms:
+    warning: 60.0
+    critical: 120.0
+  packet_loss_percent:
+    warning: 2.0
+    critical: 5.0
+  jitter_ms:
+    warning: 15.0
+    critical: 35.0
+  utilization_percent:
+    warning: 75.0
+    critical: 90.0
+
+# Network Health Score Normalization & Configurable Weights
+health:
+  weights:
+    latency: 0.20
+    packet_loss: 0.25
+    jitter: 0.15
+    utilization: 0.15
+    throughput: 0.15
+    stability: 0.10
+  baseline_expected:
+    target_latency_ms: 30.0
+    max_acceptable_latency_ms: 250.0
+    max_acceptable_jitter_ms: 60.0
+
+# Network Stability Score Parameters
+stability:
+  window_samples: 20
+  weights:
+    latency_variance: 0.30
+    jitter_variance: 0.25
+    packet_loss_burst: 0.25
+    throughput_volatility: 0.20
+
+# Baseline Engine Configuration
+baseline:
+  min_samples_required: 30
+  rolling_window_samples: 120
+  percentiles: [5, 25, 50, 75, 95]
+
+# Anomaly Detection Engine
+anomaly:
+  mode: "statistical" # 'statistical' or 'ml'
+  zscore_threshold: 2.5
+  iqr_multiplier: 1.5
+  changepoint_window: 15
+  ml_min_samples: 150
+  isolation_forest_contamination: 0.05
+
+# Incident Management & Debounce
+incidents:
+  debounce_samples_to_trigger: 3
+  debounce_samples_to_resolve: 5
+  auto_resolve: true
+  severity_rules:
+    critical_triggers: 2
+    warning_triggers: 1
+
+# Application Experience Profiles (Configurable thresholds)
+application_experience:
+  video_call:
+    max_latency_ms: 100.0
+    max_jitter_ms: 20.0
+    max_packet_loss_pct: 1.5
+    min_download_mbps: 3.0
+    min_upload_mbps: 1.5
+  gaming:
+    max_latency_ms: 50.0
+    max_jitter_ms: 10.0
+    max_packet_loss_pct: 0.5
+    min_download_mbps: 5.0
+    min_upload_mbps: 2.0
+  web_browsing:
+    max_latency_ms: 150.0
+    max_jitter_ms: 35.0
+    max_packet_loss_pct: 3.0
+    min_download_mbps: 2.0
+    min_upload_mbps: 0.5
+  file_transfer:
+    max_latency_ms: 300.0
+    max_jitter_ms: 50.0
+    max_packet_loss_pct: 5.0
+    min_download_mbps: 15.0
+    min_upload_mbps: 5.0
+
+# SLA / Reliability Commitments
+sla:
+  target_latency_ms: 50.0
+  target_packet_loss_pct: 1.0
+  target_availability_pct: 99.5
+  max_utilization_pct: 80.0
+
+# Storage & Export Pipelines
+storage:
+  database_path: "database/network_monitor.db"
+  csv_export_dir: "data/exports"
+  auto_export_csv: true
+  csv_flush_interval_samples: 1
+  csv_files:
+    metrics: "data/exports/network_metrics.csv"
+    latency: "data/exports/latency_metrics.csv"
+    incidents: "data/exports/incidents.csv"
+    anomalies: "data/exports/anomalies.csv"
+    diagnoses: "data/exports/diagnoses.csv"
+    experience: "data/exports/application_experience.csv"
+
+# Dashboard Settings
+dashboard:
+  theme: "dark"
+  palette:
+    ice_cyan: "#E3FDFD"
+    soft_aqua: "#CBF1F5"
+    light_teal: "#A6E3E9"
+    deep_teal: "#71C9CE"
+    bg_dark: "#0D1921"
+    card_bg: "#132634"
+  live_refresh_interval_sec: 2
+  data_stale_threshold_sec: 10.0
+
+# Microsoft Power BI Integration & Live Streaming
+powerbi:
+  auto_sync_star_schema: true
+  sync_interval_samples: 5
+  export_dir: "data/exports/star_schema"
+  push_url: "" # Optional: Paste your Power BI Service Streaming Dataset Push URL here
+  api_server:
+    host: "127.0.0.1"
+    port: 8080
+  auto_refresh:
+    interval_sec: 5

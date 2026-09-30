@@ -1,0 +1,4 @@
+target_name,target_host,target_type,expected_sla_ms
+gateway,Default Gateway,Local LAN Gateway,5.0
+google_dns,8.8.8.8,Public Anycast DNS,30.0
+cloudflare_dns,1.1.1.1,Public Edge DNS,20.0
