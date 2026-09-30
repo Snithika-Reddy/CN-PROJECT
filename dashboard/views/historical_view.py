@@ -65,14 +65,14 @@ def render_historical(df: pd.DataFrame):
         st.warning(fp.summary_message)
     else:
         st.markdown(f"""
-        <div style="background:rgba(17,32,45,0.8); border:1px solid rgba(113,201,206,0.25); border-radius:10px; padding:16px; margin-bottom:16px;">
-            <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
-                <div><span style="color:#A6E3E9;">Typical Latency:</span> <b style="color:#E3FDFD;">{fp.typical_latency_ms} ms</b></div>
-                <div><span style="color:#A6E3E9;">Typical Jitter:</span> <b style="color:#E3FDFD;">{fp.typical_jitter_ms} ms</b></div>
-                <div><span style="color:#A6E3E9;">Typical Loss:</span> <b style="color:#E3FDFD;">{fp.typical_packet_loss_pct}%</b></div>
-                <div><span style="color:#A6E3E9;">Typical Download:</span> <b style="color:#E3FDFD;">{fp.typical_download_mbps} Mbps</b></div>
-                <div><span style="color:#A6E3E9;">Typical Upload:</span> <b style="color:#E3FDFD;">{fp.typical_upload_mbps} Mbps</b></div>
-                <div><span style="color:#A6E3E9;">Most Unstable Window:</span> <b style="color:#E3FDFD;">{fp.most_unstable_period}</b></div>
+        <div class="kpi-card" style="margin-bottom:16px; border-left: 5px solid #CDAAEA;">
+            <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 14px;">
+                <div><span style="color:#4C3C6E; font-weight:600;">Typical Latency:</span> <b style="color:#15112B;">{fp.typical_latency_ms} ms</b></div>
+                <div><span style="color:#4C3C6E; font-weight:600;">Typical Jitter:</span> <b style="color:#15112B;">{fp.typical_jitter_ms} ms</b></div>
+                <div><span style="color:#4C3C6E; font-weight:600;">Typical Loss:</span> <b style="color:#15112B;">{fp.typical_packet_loss_pct}%</b></div>
+                <div><span style="color:#4C3C6E; font-weight:600;">Typical Download:</span> <b style="color:#15112B;">{fp.typical_download_mbps} Mbps</b></div>
+                <div><span style="color:#4C3C6E; font-weight:600;">Typical Upload:</span> <b style="color:#15112B;">{fp.typical_upload_mbps} Mbps</b></div>
+                <div><span style="color:#4C3C6E; font-weight:600;">Most Unstable Window:</span> <b style="color:#763B9E;">{fp.most_unstable_period}</b></div>
             </div>
         </div>
         """, unsafe_allow_html=True)

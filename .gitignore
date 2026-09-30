@@ -29,7 +29,8 @@ desktop.ini
 *.sublime-workspace
 
 # Streamlit runtime
-.streamlit/
+.streamlit/*
+!.streamlit/config.toml
 
 # Testing
 .pytest_cache/

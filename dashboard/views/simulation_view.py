@@ -13,9 +13,9 @@ def render_simulation_replay(db: DatabaseManager):
     st.markdown('<div class="section-title">CONTROLLED SIMULATION & INCIDENT REPLAY WORKBENCH</div>', unsafe_allow_html=True)
 
     st.markdown("""
-    <div style="background:rgba(17,32,45,0.7); padding:12px 18px; border-radius:8px; border-left:3px solid #A6E3E9; margin-bottom:16px;">
-        <span style="color:#A6E3E9; font-weight:600;">Academic Integrity Gating:</span>
-        <span style="color:#E3FDFD;">
+    <div class="palette-banner">
+        <span style="color:#763B9E; font-weight:700;">Academic Integrity Gating:</span>
+        <span style="color:#15112B; font-weight:500;">
         All synthetic records generated in this workbench are explicitly marked with <code>is_simulation = 1</code>
         in SQLite and CSV exports. Simulated data is isolated from real production baselines.
         </span>

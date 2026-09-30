@@ -57,7 +57,7 @@ def render_data_quality(metrics_df: pd.DataFrame, db_path: str = "database/netwo
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-label">SQLite Storage Size</div>
-            <div class="kpi-value">{sys_metrics.db_size_kb:.1f} <span style="font-size:14px; color:#A6E3E9;">KB</span></div>
+            <div class="kpi-value">{sys_metrics.db_size_kb:.1f} <span style="font-size:14px; color:#4C3C6E;">KB</span></div>
             <div class="kpi-subtext">Authoritative WAL Database</div>
         </div>
         """, unsafe_allow_html=True)
@@ -77,7 +77,7 @@ def render_data_quality(metrics_df: pd.DataFrame, db_path: str = "database/netwo
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-label">Process Memory Footprint</div>
-            <div class="kpi-value">{sys_metrics.memory_used_mb:.1f} <span style="font-size:14px; color:#A6E3E9;">MB</span></div>
+            <div class="kpi-value">{sys_metrics.memory_used_mb:.1f} <span style="font-size:14px; color:#4C3C6E;">MB</span></div>
             <div class="kpi-subtext">Lightweight RSS RAM</div>
         </div>
         """, unsafe_allow_html=True)

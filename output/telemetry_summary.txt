@@ -1,0 +1,17 @@
+===========================================================
+ NETINTEL - REAL-TIME TELEMETRY & OBSERVABILITY OUTPUT
+ Generated: 2026-09-30T12:45:02.400887+00:00
+===========================================================
+ Status:                      OPERATIONAL
+ Total Real Samples:          5
+ Recent Average Health Score: 94.44 / 100
+ Average Latency:             20.3 ms
+ 95th Percentile Latency:     30.6 ms
+ Packet Loss SLA Compliance:  100.0%
+ Total Incidents Tracked:     0
+ Total Anomalies Flagged:     0
+===========================================================
+ Datasets: data/exports/star_schema/ and data/exports/
+ Live Web Dashboard: http://localhost:8501
+ Power BI REST Streaming API: http://localhost:8080/api/live
+===========================================================

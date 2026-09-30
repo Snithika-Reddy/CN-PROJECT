@@ -23,7 +23,7 @@ def render_traffic_analytics(df: pd.DataFrame):
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-label">Peak Download Observed</div>
-            <div class="kpi-value">{peak_down:.2f} <span style="font-size:14px; color:#A6E3E9;">Mbps</span></div>
+            <div class="kpi-value">{peak_down:.2f} <span style="font-size:14px; color:#4C3C6E;">Mbps</span></div>
             <div class="kpi-subtext">Session Maximum</div>
         </div>
         """, unsafe_allow_html=True)
@@ -31,7 +31,7 @@ def render_traffic_analytics(df: pd.DataFrame):
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-label">Peak Upload Observed</div>
-            <div class="kpi-value">{peak_up:.2f} <span style="font-size:14px; color:#A6E3E9;">Mbps</span></div>
+            <div class="kpi-value">{peak_up:.2f} <span style="font-size:14px; color:#4C3C6E;">Mbps</span></div>
             <div class="kpi-subtext">Session Maximum</div>
         </div>
         """, unsafe_allow_html=True)
@@ -39,7 +39,7 @@ def render_traffic_analytics(df: pd.DataFrame):
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-label">Cumulative Data Volume</div>
-            <div class="kpi-value">{total_bytes:.1f} <span style="font-size:14px; color:#A6E3E9;">MB</span></div>
+            <div class="kpi-value">{total_bytes:.1f} <span style="font-size:14px; color:#4C3C6E;">MB</span></div>
             <div class="kpi-subtext">Tx + Rx Transferred</div>
         </div>
         """, unsafe_allow_html=True)
@@ -48,35 +48,29 @@ def render_traffic_analytics(df: pd.DataFrame):
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-label">Mean Packet Processing Rate</div>
-            <div class="kpi-value">{avg_pps:.0f} <span style="font-size:14px; color:#A6E3E9;">PPS</span></div>
+            <div class="kpi-value">{avg_pps:.0f} <span style="font-size:14px; color:#4C3C6E;">PPS</span></div>
             <div class="kpi-subtext">Egress + Ingress Frame Rate</div>
         </div>
         """, unsafe_allow_html=True)
 
     # Packet Rates Chart
+    from dashboard.styles import apply_plotly_theme
     st.markdown('<div class="section-title">Packet Processing Rate (PPS)</div>', unsafe_allow_html=True)
     fig_pps = go.Figure()
     fig_pps.add_trace(go.Scatter(
         x=df["timestamp"],
         y=df["packets_recv_per_sec"],
         name="Packets Recv / Sec",
-        line=dict(color="#71C9CE", width=2)
+        line=dict(color="#7B32A8", width=2.5)
     ))
     fig_pps.add_trace(go.Scatter(
         x=df["timestamp"],
         y=df["packets_sent_per_sec"],
         name="Packets Sent / Sec",
-        line=dict(color="#A6E3E9", width=2, dash="dot")
+        line=dict(color="#2563EB", width=2, dash="dot")
     ))
-    fig_pps.update_layout(
-        template="plotly_dark",
-        paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(17,32,45,0.5)",
-        margin=dict(l=10, r=10, t=20, b=20),
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-        height=280,
-        yaxis=dict(title="Packets / Sec", showgrid=True, gridcolor="rgba(113,201,206,0.1)")
-    )
+    apply_plotly_theme(fig_pps)
+    fig_pps.update_layout(height=280, yaxis=dict(title="Packets / Sec"))
     st.plotly_chart(fig_pps, use_container_width=True)
 
     # Interface Utilization
@@ -86,16 +80,10 @@ def render_traffic_analytics(df: pd.DataFrame):
         x=df["timestamp"],
         y=df["estimated_utilization_pct"],
         name="Estimated Interface Utilization",
-        line=dict(color="#CBF1F5", width=2.5),
+        line=dict(color="#6A2D94", width=2.5),
         fill="tozeroy",
-        fillcolor="rgba(203, 241, 245, 0.15)"
+        fillcolor="rgba(205, 170, 234, 0.25)"
     ))
-    fig_util.update_layout(
-        template="plotly_dark",
-        paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(17,32,45,0.5)",
-        margin=dict(l=10, r=10, t=20, b=20),
-        height=260,
-        yaxis=dict(range=[0, 100], title="Utilization %", showgrid=True, gridcolor="rgba(113,201,206,0.1)")
-    )
+    apply_plotly_theme(fig_util)
+    fig_util.update_layout(height=260, yaxis=dict(range=[0, 100], title="Utilization %"))
     st.plotly_chart(fig_util, use_container_width=True)

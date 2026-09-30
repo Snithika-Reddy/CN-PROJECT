@@ -11,7 +11,7 @@ def render_anomalies(anomalies_df: pd.DataFrame, is_ml_active: bool = False):
     mode_label = "ML Mode (Isolation Forest / Mahalanobis)" if is_ml_active else "Statistical Mode (Z-Score & IQR Tukey Fences)"
     st.markdown(f"""
     <div style="margin-bottom:16px;">
-        <span style="color:#A6E3E9;">Active Detection Mode:</span>
+        <span style="color:#4C3C6E; font-weight:700;">Active Detection Mode:</span>
         <span class="status-badge badge-live" style="margin-left:8px;">{mode_label}</span>
     </div>
     """, unsafe_allow_html=True)
@@ -37,7 +37,7 @@ def render_anomalies(anomalies_df: pd.DataFrame, is_ml_active: bool = False):
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-label">Critical Severity</div>
-            <div class="kpi-value" style="color:#F94144;">{crit_count}</div>
+            <div class="kpi-value" style="color:#DC2626;">{crit_count}</div>
             <div class="kpi-subtext">Severe degradation spikes</div>
         </div>
         """, unsafe_allow_html=True)
@@ -45,7 +45,7 @@ def render_anomalies(anomalies_df: pd.DataFrame, is_ml_active: bool = False):
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-label">High Severity</div>
-            <div class="kpi-value" style="color:#F9C74F;">{high_count}</div>
+            <div class="kpi-value" style="color:#D97706;">{high_count}</div>
             <div class="kpi-subtext">Substantial outlier deviations</div>
         </div>
         """, unsafe_allow_html=True)

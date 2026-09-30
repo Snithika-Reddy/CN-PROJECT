@@ -31,7 +31,7 @@ def render_incidents(db: DatabaseManager, is_simulation: bool = False):
         </div>
         """, unsafe_allow_html=True)
     with c2:
-        o_color = "#F94144" if open_count > 0 else "#71C9CE"
+        o_color = "#DC2626" if open_count > 0 else "#2E7D32"
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-label">Active Incidents</div>
@@ -43,7 +43,7 @@ def render_incidents(db: DatabaseManager, is_simulation: bool = False):
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-label">Critical Incidents</div>
-            <div class="kpi-value" style="color:#F94144;">{crit_count}</div>
+            <div class="kpi-value" style="color:#DC2626;">{crit_count}</div>
             <div class="kpi-subtext">Severe degradation tier</div>
         </div>
         """, unsafe_allow_html=True)
@@ -77,9 +77,9 @@ def render_incidents(db: DatabaseManager, is_simulation: bool = False):
             for ev in timeline:
                 st.markdown(f"""
                 <div class="timeline-item">
-                    <span style="color:#A6E3E9; font-weight:600; font-family:'JetBrains Mono'; font-size:12px;">{ev.get('timestamp', '')}</span>
+                    <span style="color:#4C3C6E; font-weight:700; font-family:'JetBrains Mono'; font-size:12px;">{ev.get('timestamp', '')}</span>
                     <span class="status-badge badge-live" style="margin-left:8px; font-size:10px;">{ev.get('event_type', '')}</span>
-                    <div style="color:#E3FDFD; margin-top:4px;">{ev.get('description', '')}</div>
+                    <div style="color:#15112B; font-weight:600; margin-top:4px;">{ev.get('description', '')}</div>
                 </div>
                 """, unsafe_allow_html=True)
         else:

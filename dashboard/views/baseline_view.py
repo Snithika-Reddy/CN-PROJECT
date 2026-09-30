@@ -45,9 +45,9 @@ def render_baseline(metrics_df: pd.DataFrame):
     st.dataframe(b_df, use_container_width=True, hide_index=True)
 
     st.markdown("""
-    <div style="background:rgba(17,32,45,0.7); padding:14px 18px; border-radius:8px; border-left:3px solid #71C9CE; margin-top:16px;">
-        <span style="color:#71C9CE; font-weight:600;">Methodological Integrity:</span>
-        <span style="color:#E3FDFD;">
+    <div class="palette-banner">
+        <span style="color:#763B9E; font-weight:700;">Methodological Integrity:</span>
+        <span style="color:#15112B; font-weight:500;">
         Baselines use non-parametric median and Interquartile Range (IQR) Tukey fences
         derived exclusively from local hardware and connectivity measurements.
         </span>

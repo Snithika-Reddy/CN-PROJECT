@@ -41,13 +41,13 @@ def render_diagnosis(latest_df: pd.DataFrame, probes_df: pd.DataFrame):
 
     # Primary Diagnosis Card
     st.markdown(f"""
-    <div class="kpi-card" style="border-left: 4px solid #71C9CE; margin-top:16px;">
+    <div class="kpi-card" style="border-left: 5px solid #CDAAEA; margin-top:16px;">
         <div style="display:flex; justify-content:space-between; align-items:center;">
             <div class="kpi-label" style="font-size:13px;">Primary Diagnostic Hypothesis</div>
             <span class="status-badge {badge_style}">Evidence Strength: {pri.evidence_strength}</span>
         </div>
-        <div style="font-size:22px; font-weight:700; color:#E3FDFD; margin-top:6px;">{pri.cause}</div>
-        <div style="color:#A6E3E9; font-size:13px; margin-top:4px;">Confidence Metric: {pri.confidence_score * 100:.0f}%</div>
+        <div style="font-size:22px; font-weight:800; color:#15112B; margin-top:6px;">{pri.cause}</div>
+        <div style="color:#4C3C6E; font-size:13px; font-weight:600; margin-top:4px;">Confidence Metric: {pri.confidence_score * 100:.0f}%</div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -57,7 +57,7 @@ def render_diagnosis(latest_df: pd.DataFrame, probes_df: pd.DataFrame):
         for ev in pri.evidence_items:
             st.markdown(f"""
             <div class="timeline-item">
-                <span style="color:#E3FDFD; font-weight:500;">{ev}</span>
+                <span style="color:#15112B; font-weight:600;">{ev}</span>
             </div>
             """, unsafe_allow_html=True)
     else:

@@ -72,10 +72,10 @@ def render_app_experience(latest_df: pd.DataFrame):
     # Limiting Factor Summary
     st.markdown('<div class="section-title">Current Quality of Service Bottleneck Assessment</div>', unsafe_allow_html=True)
     st.markdown(f"""
-    <div style="background:rgba(17,32,45,0.7); padding:16px 20px; border-radius:10px; border-left:4px solid #71C9CE;">
-        <div style="color:#A6E3E9; font-size:12px; text-transform:uppercase;">Primary Limiting Factor</div>
-        <div style="font-size:18px; font-weight:600; color:#E3FDFD; margin-top:4px;">{rep.primary_limiting_factor}</div>
-        <div style="color:#6C8E99; font-size:12px; margin-top:6px;">
+    <div class="palette-banner" style="border-left: 5px solid #CDAAEA;">
+        <div class="kpi-label">Primary Limiting Factor</div>
+        <div style="font-size:18px; font-weight:800; color:#15112B; margin-top:4px;">{rep.primary_limiting_factor}</div>
+        <div style="color:#5E547E; font-size:12px; margin-top:6px; font-weight:500;">
             Note: This evaluation is an empirical estimate computed from physical link telemetry (RTT, IPDV, frame loss, throughput), not deep packet inspection.
         </div>
     </div>

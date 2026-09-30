@@ -1,0 +1,18 @@
+{
+  "timestamp": "2026-09-30T12:45:02.340206+00:00",
+  "status": "OPERATIONAL",
+  "telemetry": {
+    "total_samples": 5,
+    "health_score_avg": 94.44,
+    "latency_avg_ms": 20.3,
+    "latency_p95_ms": 30.6,
+    "packet_loss_sla_compliance_pct": 100.0
+  },
+  "incidents": {
+    "total_tracked": 0,
+    "recent": []
+  },
+  "anomalies": {
+    "total_detected": 0
+  }
+}

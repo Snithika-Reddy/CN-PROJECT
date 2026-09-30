@@ -27,7 +27,7 @@ def render_latency_jitter(metrics_df: pd.DataFrame, probes_df: pd.DataFrame):
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-label">Median Latency (p50)</div>
-            <div class="kpi-value">{p50_lat:.1f} <span style="font-size:14px; color:#A6E3E9;">ms</span></div>
+            <div class="kpi-value">{p50_lat:.1f} <span style="font-size:14px; color:#4C3C6E;">ms</span></div>
             <div class="kpi-subtext">Nominal round-trip delay</div>
         </div>
         """, unsafe_allow_html=True)
@@ -35,7 +35,7 @@ def render_latency_jitter(metrics_df: pd.DataFrame, probes_df: pd.DataFrame):
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-label">95th Percentile Latency</div>
-            <div class="kpi-value">{p95_lat:.1f} <span style="font-size:14px; color:#A6E3E9;">ms</span></div>
+            <div class="kpi-value">{p95_lat:.1f} <span style="font-size:14px; color:#4C3C6E;">ms</span></div>
             <div class="kpi-subtext">Tail latency spike bound</div>
         </div>
         """, unsafe_allow_html=True)
@@ -43,7 +43,7 @@ def render_latency_jitter(metrics_df: pd.DataFrame, probes_df: pd.DataFrame):
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-label">95th Percentile Jitter</div>
-            <div class="kpi-value">{p95_jit:.1f} <span style="font-size:14px; color:#A6E3E9;">ms</span></div>
+            <div class="kpi-value">{p95_jit:.1f} <span style="font-size:14px; color:#4C3C6E;">ms</span></div>
             <div class="kpi-subtext">RFC 3550 Delay Variation</div>
         </div>
         """, unsafe_allow_html=True)
@@ -51,32 +51,29 @@ def render_latency_jitter(metrics_df: pd.DataFrame, probes_df: pd.DataFrame):
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-label">Average Packet Loss</div>
-            <div class="kpi-value">{loss_mean:.2f} <span style="font-size:14px; color:#A6E3E9;">%</span></div>
+            <div class="kpi-value">{loss_mean:.2f} <span style="font-size:14px; color:#4C3C6E;">%</span></div>
             <div class="kpi-subtext">Multi-probe transmission loss</div>
         </div>
         """, unsafe_allow_html=True)
+
+    from dashboard.styles import apply_plotly_theme
 
     # Multi-Target Comparison Chart
     if not probes_df.empty:
         st.markdown('<div class="section-title">Hop Comparison: Default Gateway vs. Public DNS Targets</div>', unsafe_allow_html=True)
         fig_targets = go.Figure()
-        for target in probes_df["target_name"].unique():
+        colors = ["#7B32A8", "#2563EB", "#059669", "#D97706"]
+        for idx, target in enumerate(probes_df["target_name"].unique()):
             t_df = probes_df[probes_df["target_name"] == target]
             fig_targets.add_trace(go.Scatter(
                 x=t_df["timestamp"],
                 y=t_df["latency_avg_ms"],
                 name=f"{target} ({t_df['target_host'].iloc[0]})",
-                mode="lines+markers"
+                mode="lines+markers",
+                line=dict(color=colors[idx % len(colors)], width=2.5)
             ))
-        fig_targets.update_layout(
-            template="plotly_dark",
-            paper_bgcolor="rgba(0,0,0,0)",
-            plot_bgcolor="rgba(17,32,45,0.5)",
-            margin=dict(l=10, r=10, t=20, b=20),
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-            height=300,
-            yaxis=dict(title="RTT Latency (ms)", showgrid=True, gridcolor="rgba(113,201,206,0.1)")
-        )
+        apply_plotly_theme(fig_targets)
+        fig_targets.update_layout(height=300, yaxis=dict(title="RTT Latency (ms)"))
         st.plotly_chart(fig_targets, use_container_width=True)
 
     # Jitter & Packet Loss Distribution
@@ -85,19 +82,13 @@ def render_latency_jitter(metrics_df: pd.DataFrame, probes_df: pd.DataFrame):
         st.markdown('<div class="section-title">Latency Distribution Histogram</div>', unsafe_allow_html=True)
         fig_hist = go.Figure(data=[go.Histogram(
             x=lat_clean,
-            marker_color="#71C9CE",
-            opacity=0.8,
+            marker_color="#CDAAEA",
+            marker_line=dict(color="#6A2D94", width=1.5),
+            opacity=0.85,
             nbinsx=25
         )])
-        fig_hist.update_layout(
-            template="plotly_dark",
-            paper_bgcolor="rgba(0,0,0,0)",
-            plot_bgcolor="rgba(17,32,45,0.5)",
-            margin=dict(l=10, r=10, t=20, b=20),
-            height=260,
-            xaxis=dict(title="Latency (ms)"),
-            yaxis=dict(title="Frequency", showgrid=True, gridcolor="rgba(113,201,206,0.1)")
-        )
+        apply_plotly_theme(fig_hist)
+        fig_hist.update_layout(height=260, xaxis=dict(title="Latency (ms)"), yaxis=dict(title="Frequency"))
         st.plotly_chart(fig_hist, use_container_width=True)
 
     with col2:
@@ -107,16 +98,13 @@ def render_latency_jitter(metrics_df: pd.DataFrame, probes_df: pd.DataFrame):
             x=metrics_df["timestamp"],
             y=metrics_df["packet_loss_pct"],
             mode="lines+markers",
-            line=dict(color="#F94144", width=2),
+            line=dict(color="#DC2626", width=2),
             fill="tozeroy",
-            fillcolor="rgba(249, 65, 68, 0.15)"
+            fillcolor="rgba(220, 38, 38, 0.15)"
         ))
+        apply_plotly_theme(fig_loss)
         fig_loss.update_layout(
-            template="plotly_dark",
-            paper_bgcolor="rgba(0,0,0,0)",
-            plot_bgcolor="rgba(17,32,45,0.5)",
-            margin=dict(l=10, r=10, t=20, b=20),
             height=260,
-            yaxis=dict(range=[0, max(10, metrics_df["packet_loss_pct"].max() + 2)], title="Loss %", showgrid=True, gridcolor="rgba(113,201,206,0.1)")
+            yaxis=dict(range=[0, max(10, metrics_df["packet_loss_pct"].max() + 2)], title="Loss %")
         )
         st.plotly_chart(fig_loss, use_container_width=True)

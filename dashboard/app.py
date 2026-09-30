@@ -1,8 +1,12 @@
 """NetIntel Dashboard Master Application.
 
 Real-Time Network Intelligence, Performance Diagnosis & Adaptive Optimization Platform.
-Adheres strictly to custom ColorHunt palette (#E3FDFD, #CBF1F5, #A6E3E9, #71C9CE)
-and professional software engineering standards.
+Strictly adheres to the 4-color custom design system:
+- Color 1 (Mint / Cyan Ice):    #DFFCF9
+- Color 2 (Pastel Blue / Soft): #CBDFFC
+- Color 3 (Pastel Lavender):    #C4BFF0
+- Color 4 (Lilac / Orchid):     #CDAAEA
+Features modern button-based navigation and glassmorphic telemetry cards.
 """
 
 from pathlib import Path
@@ -48,7 +52,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Inject Custom Styling
+# Inject 4-Color Custom Design System
 st.markdown(get_custom_css(), unsafe_allow_html=True)
 
 
@@ -66,39 +70,62 @@ latency_repo = LatencyRepository(db)
 anomaly_repo = AnomalyRepository(db)
 incident_repo = IncidentRepository(db)
 
-# Sidebar Navigation & Controls
+# Initialize Session State for Active Page
+if "current_page" not in st.session_state:
+    st.session_state.current_page = "1. Live Monitor"
+
+# --- Sidebar Header ---
 st.sidebar.markdown("""
-<div style="text-align:center; padding: 10px 0;">
-    <h2 style="color:#E3FDFD; margin:0; font-size:22px; font-weight:700;">🌐 NetIntel</h2>
-    <div style="color:#A6E3E9; font-size:11px; letter-spacing:0.5px;">Network Observability Platform</div>
+<div style="text-align:center; padding: 12px 0 16px 0; border-bottom: 2px solid #C4BFF0; margin-bottom: 14px;">
+    <h2 style="margin:0; font-size:24px; font-weight:900; color:#1C1236; letter-spacing:-0.5px;">
+        🌐 NetIntel
+    </h2>
+    <div style="color:#4A3B6E; font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; margin-top:4px;">
+        Network Intelligence & BI
+    </div>
 </div>
 """, unsafe_allow_html=True)
 
-nav_page = st.sidebar.radio(
-    "NAVIGATION",
-    [
-        "1. Live Monitor",
-        "2. Network Health",
-        "3. Traffic Analytics",
-        "4. Latency & Jitter",
-        "5. Baseline",
-        "6. Anomalies",
-        "7. Diagnosis",
-        "8. Incidents",
-        "9. What Changed?",
-        "10. App Experience",
-        "11. Historical Trends",
-        "12. Data Quality",
-        "13. Simulation & Replay",
-        "14. Power BI Pipeline"
-    ]
-)
+# --- Categorized Navigation Buttons ---
+NAV_SECTIONS = [
+    ("📊 OBSERVE & MONITOR", [
+        ("⚡ 1. Live Monitor", "1. Live Monitor"),
+        ("💓 2. Network Health", "2. Network Health"),
+        ("📈 3. Traffic Analytics", "3. Traffic Analytics"),
+        ("⏱️ 4. Latency & Jitter", "4. Latency & Jitter"),
+    ]),
+    ("🧠 INTELLIGENCE & AI", [
+        ("📏 5. Baseline", "5. Baseline"),
+        ("🚨 6. Anomalies", "6. Anomalies"),
+        ("🔍 7. Diagnosis", "7. Diagnosis"),
+        ("⚠️ 8. Incidents", "8. Incidents"),
+        ("🔄 9. What Changed?", "9. What Changed?"),
+    ]),
+    ("🎯 EXPERIENCE & RESILIENCE", [
+        ("🎮 10. App Experience", "10. App Experience"),
+        ("📊 11. Historical Trends", "11. Historical Trends"),
+        ("🛡️ 12. Data Quality", "12. Data Quality"),
+        ("🧪 13. Simulation & Replay", "13. Simulation & Replay"),
+    ]),
+    ("🚀 BUSINESS INTELLIGENCE", [
+        ("💼 14. Power BI Pipeline", "14. Power BI Pipeline"),
+    ])
+]
+
+for section_title, pages in NAV_SECTIONS:
+    st.sidebar.markdown(f'<div class="nav-category">{section_title}</div>', unsafe_allow_html=True)
+    for label, page_key in pages:
+        is_active = (st.session_state.current_page == page_key)
+        button_type = "primary" if is_active else "secondary"
+        if st.sidebar.button(label, key=f"nav_btn_{page_key}", use_container_width=True, type=button_type):
+            st.session_state.current_page = page_key
+            st.rerun()
 
 st.sidebar.markdown("---")
 st.sidebar.markdown('<div class="kpi-label">CONTROL PLANE</div>', unsafe_allow_html=True)
 
 # Single sample manual collection trigger
-if st.sidebar.button("⚡ Collect Live Sample", type="primary", use_container_width=True):
+if st.sidebar.button("⚡ Collect Live Sample", use_container_width=True):
     with st.spinner("Executing real network probes..."):
         sample = service.step()
         if sample:
@@ -115,19 +142,18 @@ include_simulation = st.sidebar.checkbox("Include Simulated Telemetry", value=Fa
 
 st.sidebar.markdown("---")
 st.sidebar.markdown("""
-<div style="font-size:11px; color:#6C8E99; text-align:center;">
-    NetIntel v1.0.0<br/>
-    Real-Time Telemetry & Diagnostic Engine<br/>
-    Power BI Pipeline Ready
+<div style="font-size:11px; color:#4C3C6E; font-weight:600; text-align:center;">
+    NetIntel v1.2.0 • 4-Color Palette Theme<br/>
+    Power BI Live Streaming Connected
 </div>
 """, unsafe_allow_html=True)
 
-# Top Application Banner
+# --- Top Application Header Banner ---
 st.markdown("""
 <div class="netintel-header">
     <div>
         <h1 class="netintel-title">Real-Time Network Intelligence Platform</h1>
-        <p class="netintel-subtitle">Continuous Telemetry Collection • Empirical Baselines • Multi-Signal Diagnosis • Adaptive Sampling</p>
+        <p class="netintel-subtitle">Pernic Hardware Counters • Empirical Baselines • Multi-Signal Diagnosis • Live Power BI Streaming</p>
     </div>
     <div style="text-align:right;">
         <span class="status-badge badge-live">SYSTEM ACTIVE</span>
@@ -135,39 +161,75 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+# --- Top Quick-Access Navigation Ribbon (Interactive Buttons) ---
+quick_col1, quick_col2, quick_col3, quick_col4, quick_col5 = st.columns(5)
+with quick_col1:
+    is_act1 = (st.session_state.current_page == "1. Live Monitor")
+    if st.button("⚡ Live Monitor", key="top_nav_1", use_container_width=True, type="primary" if is_act1 else "secondary"):
+        st.session_state.current_page = "1. Live Monitor"
+        st.rerun()
+
+with quick_col2:
+    is_act2 = (st.session_state.current_page == "2. Network Health")
+    if st.button("💓 Health Score", key="top_nav_2", use_container_width=True, type="primary" if is_act2 else "secondary"):
+        st.session_state.current_page = "2. Network Health"
+        st.rerun()
+
+with quick_col3:
+    is_act3 = (st.session_state.current_page == "4. Latency & Jitter")
+    if st.button("⏱️ Latency / SLA", key="top_nav_4", use_container_width=True, type="primary" if is_act3 else "secondary"):
+        st.session_state.current_page = "4. Latency & Jitter"
+        st.rerun()
+
+with quick_col4:
+    is_act4 = (st.session_state.current_page == "7. Diagnosis")
+    if st.button("🔍 Root Cause", key="top_nav_7", use_container_width=True, type="primary" if is_act4 else "secondary"):
+        st.session_state.current_page = "7. Diagnosis"
+        st.rerun()
+
+with quick_col5:
+    is_act5 = (st.session_state.current_page == "14. Power BI Pipeline")
+    if st.button("🚀 Power BI Studio", key="top_nav_14", use_container_width=True, type="primary" if is_act5 else "secondary"):
+        st.session_state.current_page = "14. Power BI Pipeline"
+        st.rerun()
+
+st.markdown("<div style='margin-bottom: 12px;'></div>", unsafe_allow_html=True)
+
 # Fetch Telemetry Data
 latest_df = metrics_repo.get_latest_metrics(limit=100, is_simulation=include_simulation)
 probes_df = latency_repo.get_recent_probes(limit=40)
 anomalies_df = anomaly_repo.get_recent_anomalies(limit=50, is_simulation=include_simulation)
 
+current_page = st.session_state.current_page
+
 # Page Routing
-if nav_page.startswith("1."):
+if current_page.startswith("1."):
     render_live_monitor(latest_df, probes_df)
-elif nav_page.startswith("2."):
+elif current_page.startswith("2."):
     render_network_health(latest_df)
-elif nav_page.startswith("3."):
+elif current_page.startswith("3."):
     render_traffic_analytics(latest_df)
-elif nav_page.startswith("4."):
+elif current_page.startswith("4."):
     render_latency_jitter(latest_df, probes_df)
-elif nav_page.startswith("5."):
+elif current_page.startswith("5."):
     render_baseline(latest_df)
-elif nav_page.startswith("6."):
+elif current_page.startswith("6."):
     render_anomalies(anomalies_df)
-elif nav_page.startswith("7."):
+elif current_page.startswith("7."):
     render_diagnosis(latest_df, probes_df)
-elif nav_page.startswith("8."):
+elif current_page.startswith("8."):
     render_incidents(db, is_simulation=include_simulation)
-elif nav_page.startswith("9."):
+elif current_page.startswith("9."):
     render_what_changed(db)
-elif nav_page.startswith("10."):
+elif current_page.startswith("10."):
     render_app_experience(latest_df)
-elif nav_page.startswith("11."):
+elif current_page.startswith("11."):
     render_historical(latest_df)
-elif nav_page.startswith("12."):
+elif current_page.startswith("12."):
     render_data_quality(latest_df)
-elif nav_page.startswith("13."):
+elif current_page.startswith("13."):
     render_simulation_replay(db)
-elif nav_page.startswith("14."):
+elif current_page.startswith("14."):
     render_powerbi_view(db=db, service=service)
 
 # Auto refresh handler

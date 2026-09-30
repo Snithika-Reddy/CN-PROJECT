@@ -17,10 +17,11 @@ echo   [5] Start Power BI Desktop Auto-Refresher Daemon
 echo   [6] Sync / Export Star Schema Datasets for Power BI
 echo   [7] Inject Network Simulation Scenario (High Latency Spike)
 echo   [8] Run Automated Unit Tests (pytest)
-echo   [9] Exit
+echo   [9] Generate Intelligence & Viva Reports (into output/)
+echo   [10] Exit
 echo.
 
-set /p choice="Enter choice (1-9): "
+set /p choice="Enter choice (1-10): "
 
 if "%choice%"=="1" (
     python manage.py run-all
@@ -40,6 +41,9 @@ if "%choice%"=="1" (
     pause
 ) else if "%choice%"=="8" (
     python manage.py test
+    pause
+) else if "%choice%"=="9" (
+    python manage.py report
     pause
 ) else (
     echo Exiting...

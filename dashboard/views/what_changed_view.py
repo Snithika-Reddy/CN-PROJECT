@@ -34,11 +34,11 @@ def render_what_changed(db: DatabaseManager, baseline_dict: dict[str, float] | N
     comp_df = pd.DataFrame(comparison)
 
     st.markdown(f"""
-    <div style="background:rgba(17,32,45,0.8); border:1px solid rgba(113,201,206,0.25); border-radius:10px; padding:16px; margin-bottom:16px;">
-        <div style="color:#A6E3E9; font-size:12px; text-transform:uppercase;">Incident Identifier</div>
-        <div style="font-size:20px; font-weight:700; color:#E3FDFD;">{inc_row.get('incident_id')}</div>
-        <div style="color:#CBF1F5; font-size:13px; margin-top:4px;">
-            Trigger: {inc_row.get('trigger_reason', 'N/A')} | Severity: <b>{inc_row.get('severity')}</b> | Status: <b>{inc_row.get('status')}</b>
+    <div class="kpi-card" style="margin-bottom:16px; border-left: 5px solid #CDAAEA;">
+        <div class="kpi-label">Incident Identifier</div>
+        <div class="kpi-value" style="font-size:22px;">{inc_row.get('incident_id')}</div>
+        <div class="kpi-subtext" style="font-size:13px; margin-top:6px; color:#3B3356;">
+            Trigger: {inc_row.get('trigger_reason', 'N/A')} | Severity: <b style="color:#763B9E;">{inc_row.get('severity')}</b> | Status: <b style="color:#15112B;">{inc_row.get('status')}</b>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -47,9 +47,9 @@ def render_what_changed(db: DatabaseManager, baseline_dict: dict[str, float] | N
     st.dataframe(comp_df[["metric", "baseline", "incident_peak", "change"]], use_container_width=True, hide_index=True)
 
     st.markdown("""
-    <div style="background:rgba(17,32,45,0.7); padding:14px 18px; border-radius:8px; border-left:3px solid #71C9CE; margin-top:16px;">
-        <span style="color:#71C9CE; font-weight:600;">Analytical Purpose:</span>
-        <span style="color:#E3FDFD;">
+    <div class="palette-banner">
+        <span style="color:#763B9E; font-weight:700;">Analytical Purpose:</span>
+        <span style="color:#15112B; font-weight:500;">
         This feature isolates metric delta divergence, revealing whether an outage was induced by
         bandwidth saturation, upstream queueing bufferbloat, or link-layer frame drops.
         </span>

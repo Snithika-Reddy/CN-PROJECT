@@ -157,12 +157,12 @@ storage:
 dashboard:
   theme: "dark"
   palette:
-    ice_cyan: "#E3FDFD"
-    soft_aqua: "#CBF1F5"
-    light_teal: "#A6E3E9"
-    deep_teal: "#71C9CE"
-    bg_dark: "#0D1921"
-    card_bg: "#132634"
+    mint_ice: "#DFFCF9"
+    soft_blue: "#CBDFFC"
+    lavender: "#C4BFF0"
+    orchid: "#CDAAEA"
+    bg_dark: "#0B0E1B"
+    card_bg: "#14182E"
   live_refresh_interval_sec: 2
   data_stale_threshold_sec: 10.0
 

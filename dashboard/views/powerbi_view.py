@@ -23,11 +23,13 @@ if "pbi_api_server" not in st.session_state:
     st.session_state.pbi_api_running = False
 
 
-def render_powerbi_view(db: DatabaseManager = None, service=None):
+def render_powerbi_view(*args, **kwargs):
     st.markdown('<div class="section-title">MICROSOFT POWER BI COMMAND CENTER & LIVE PIPELINE</div>', unsafe_allow_html=True)
 
+    db = kwargs.get("db") or (args[0] if len(args) > 0 else None)
     if db is None:
         db = DatabaseManager()
+    service = kwargs.get("service") or (args[1] if len(args) > 1 else None)
 
     export_dir = Path("data/exports").resolve()
     star_dir = export_dir / "star_schema"
@@ -36,11 +38,11 @@ def render_powerbi_view(db: DatabaseManager = None, service=None):
     col_arch, col_stat = st.columns([2, 1])
     with col_arch:
         st.markdown("""
-        <div style="background:rgba(17,32,45,0.85); border:1px solid rgba(113,201,206,0.3); border-radius:12px; padding:18px;">
-            <div style="font-size:16px; font-weight:700; color:#E3FDFD; margin-bottom:6px;">
+        <div class="palette-banner" style="margin-bottom:0;">
+            <div style="font-size:16px; font-weight:800; color:#15112B; margin-bottom:6px;">
                 🚀 Multi-Tier Live Power BI Ecosystem
             </div>
-            <div style="color:#A6E3E9; font-size:13px; line-height:1.5;">
+            <div style="color:#3B3356; font-size:13px; line-height:1.5; font-weight:500;">
                 NetIntel streams high-velocity network metrics into <b>Microsoft Power BI</b> via 4 enterprise integration modes:
                 <b>(1) Direct Python Script Connector</b> for zero-config Desktop loads, 
                 <b>(2) Star Schema Relational Store</b> with Windows Auto-Refresh daemon, 
@@ -60,10 +62,10 @@ def render_powerbi_view(db: DatabaseManager = None, service=None):
             total_incidents = 0
 
         st.markdown(f"""
-        <div style="background:rgba(19,38,52,0.85); border:1px solid rgba(166,227,233,0.25); border-radius:12px; padding:18px; text-align:center;">
-            <div style="color:#A6E3E9; font-size:11px; text-transform:uppercase; letter-spacing:1px;">Authoritative Telemetry Store</div>
-            <div style="font-size:24px; font-weight:800; color:#71C9CE; margin:4px 0;">{total_metrics:,} Rows</div>
-            <div style="color:#CBF1F5; font-size:12px;">Active Incidents: <b>{total_incidents}</b></div>
+        <div class="kpi-card" style="text-align:center; padding:18px; margin-bottom:0;">
+            <div class="kpi-label">Authoritative Telemetry Store</div>
+            <div class="kpi-value" style="font-size:24px; color:#763B9E; margin:4px 0;">{total_metrics:,} Rows</div>
+            <div style="color:#4C3C6E; font-size:12px; font-weight:600;">Active Incidents: <b>{total_incidents}</b></div>
             <div style="margin-top:6px;"><span class="status-badge badge-live">SYNC ENGINE READY</span></div>
         </div>
         """, unsafe_allow_html=True)
@@ -71,6 +73,7 @@ def render_powerbi_view(db: DatabaseManager = None, service=None):
     st.markdown("<br/>", unsafe_allow_html=True)
 
     # --- Section 1: Live Interactive Power BI Visuals Preview ---
+    from dashboard.styles import apply_plotly_theme
     st.markdown('<div class="section-title">1. Live Power BI Report Preview (Simulated In-Memory Rendering)</div>', unsafe_allow_html=True)
     st.caption("Visualizes exactly how the Star Schema Fact and Dimension data renders inside Microsoft Power BI Desktop.")
 
@@ -105,15 +108,9 @@ def render_powerbi_view(db: DatabaseManager = None, service=None):
                 x="timestamp",
                 y=["latency_ms", "jitter_ms"],
                 title="Power BI Live Line Chart: Latency & Jitter (ms)",
-                color_discrete_map={"latency_ms": "#71C9CE", "jitter_ms": "#A78BFA"},
-                template="plotly_dark"
+                color_discrete_map={"latency_ms": "#7B32A8", "jitter_ms": "#2563EB"},
             )
-            fig_lat.update_layout(
-                plot_bgcolor="rgba(11,20,28,0.9)",
-                paper_bgcolor="rgba(11,20,28,0.9)",
-                margin=dict(l=20, r=20, t=40, b=20),
-                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
-            )
+            apply_plotly_theme(fig_lat)
             st.plotly_chart(fig_lat, use_container_width=True)
 
         with ch_c2:
@@ -122,15 +119,9 @@ def render_powerbi_view(db: DatabaseManager = None, service=None):
                 x="timestamp",
                 y=["download_mbps", "upload_mbps"],
                 title="Power BI Live Area Chart: Ingress & Egress Throughput (Mbps)",
-                color_discrete_map={"download_mbps": "#38BDF8", "upload_mbps": "#10B981"},
-                template="plotly_dark"
+                color_discrete_map={"download_mbps": "#2563EB", "upload_mbps": "#059669"},
             )
-            fig_bw.update_layout(
-                plot_bgcolor="rgba(11,20,28,0.9)",
-                paper_bgcolor="rgba(11,20,28,0.9)",
-                margin=dict(l=20, r=20, t=40, b=20),
-                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
-            )
+            apply_plotly_theme(fig_bw)
             st.plotly_chart(fig_bw, use_container_width=True)
     else:
         st.info("No telemetry samples found in database. Click '⚡ Collect Live Sample' in sidebar to seed telemetry.")

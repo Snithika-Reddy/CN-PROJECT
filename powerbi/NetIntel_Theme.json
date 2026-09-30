@@ -1,45 +1,45 @@
 {
-  "name": "NetIntel Cyber Intelligence Dark Theme",
+  "name": "NetIntel 4-Color Pastel Theme",
   "dataColors": [
-    "#71C9CE",
-    "#A6E3E9",
-    "#10B981",
-    "#CBF1F5",
-    "#F59E0B",
-    "#EF4444",
-    "#38BDF8",
-    "#A78BFA"
+    "#CDAAEA",
+    "#C4BFF0",
+    "#CBDFFC",
+    "#DFFCF9",
+    "#7B32A8",
+    "#2563EB",
+    "#059669",
+    "#D97706"
   ],
-  "background": "#0B141C",
-  "foreground": "#E3FDFD",
-  "tableAccent": "#1A2F3D",
+  "background": "#DFFCF9",
+  "foreground": "#15112B",
+  "tableAccent": "#C4BFF0",
   "visualStyles": {
     "*": {
       "*": {
         "background": [
           {
-            "color": { "solid": { "color": "#11202D" } },
-            "transparency": 10
+            "color": { "solid": { "color": "#FFFFFF" } },
+            "transparency": 5
           }
         ],
         "border": [
           {
             "show": true,
-            "color": { "solid": { "color": "#1D3B4E" } },
-            "radius": 8
+            "color": { "solid": { "color": "#C4BFF0" } },
+            "radius": 10
           }
         ],
         "dropShadow": [
           {
             "show": true,
-            "color": { "solid": { "color": "#000000" } },
-            "transparency": 50
+            "color": { "solid": { "color": "#C4BFF0" } },
+            "transparency": 70
           }
         ],
         "title": [
           {
             "show": true,
-            "fontColor": { "solid": { "color": "#E3FDFD" } },
+            "fontColor": { "solid": { "color": "#15112B" } },
             "fontSize": 12,
             "fontFamily": "Segoe UI Semibold"
           }
@@ -50,7 +50,7 @@
       "*": {
         "background": [
           {
-            "color": { "solid": { "color": "#0B141C" } },
+            "color": { "solid": { "color": "#DFFCF9" } },
             "transparency": 0
           }
         ]
@@ -60,14 +60,14 @@
       "*": {
         "labels": [
           {
-            "color": { "solid": { "color": "#71C9CE" } },
+            "color": { "solid": { "color": "#15112B" } },
             "fontSize": 24,
             "fontFamily": "Segoe UI Bold"
           }
         ],
         "categoryLabels": [
           {
-            "color": { "solid": { "color": "#A6E3E9" } },
+            "color": { "solid": { "color": "#4C3C6E" } },
             "fontSize": 10,
             "fontFamily": "Segoe UI"
           }

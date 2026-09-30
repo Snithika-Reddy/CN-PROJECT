@@ -27,9 +27,9 @@ def render_live_monitor(latest_df: pd.DataFrame, probes_df: pd.DataFrame, active
 
     # Header Status Bar
     st.markdown(f"""
-    <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(17,32,45,0.7); padding:10px 16px; border-radius:8px; border:1px solid rgba(113,201,206,0.2); margin-bottom:16px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; background:#FFFFFF; padding:12px 18px; border-radius:10px; border:1.5px solid #C4BFF0; box-shadow:0 2px 10px rgba(196, 191, 240, 0.25); margin-bottom:16px;">
         <div>
-            <span style="color:#A6E3E9; font-weight:600;">Monitored Interface:</span> <span style="color:#E3FDFD; font-weight:700;">{latest.get('interface_name', 'Wi-Fi')}</span>
+            <span style="color:#4C3C6E; font-weight:700;">Monitored Interface:</span> <span style="color:#15112B; font-weight:800;">{latest.get('interface_name', 'Wi-Fi')}</span>
         </div>
         <div>
             <span class="status-badge {mode_class}">MODE: {mode}</span>
@@ -44,7 +44,7 @@ def render_live_monitor(latest_df: pd.DataFrame, probes_df: pd.DataFrame, active
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-label">Download Throughput</div>
-            <div class="kpi-value">{latest.get('download_mbps', 0.0):.2f} <span style="font-size:14px; color:#A6E3E9;">Mbps</span></div>
+            <div class="kpi-value">{latest.get('download_mbps', 0.0):.2f} <span style="font-size:14px; color:#4C3C6E;">Mbps</span></div>
             <div class="kpi-subtext">Rx Rate: {latest.get('packets_recv_per_sec', 0.0):.0f} pps</div>
         </div>
         """, unsafe_allow_html=True)
@@ -52,7 +52,7 @@ def render_live_monitor(latest_df: pd.DataFrame, probes_df: pd.DataFrame, active
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-label">Upload Throughput</div>
-            <div class="kpi-value">{latest.get('upload_mbps', 0.0):.2f} <span style="font-size:14px; color:#A6E3E9;">Mbps</span></div>
+            <div class="kpi-value">{latest.get('upload_mbps', 0.0):.2f} <span style="font-size:14px; color:#4C3C6E;">Mbps</span></div>
             <div class="kpi-subtext">Tx Rate: {latest.get('packets_sent_per_sec', 0.0):.0f} pps</div>
         </div>
         """, unsafe_allow_html=True)
@@ -62,7 +62,7 @@ def render_live_monitor(latest_df: pd.DataFrame, probes_df: pd.DataFrame, active
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-label">Round-Trip Latency</div>
-            <div class="kpi-value">{lat_str} <span style="font-size:14px; color:#A6E3E9;">ms</span></div>
+            <div class="kpi-value">{lat_str} <span style="font-size:14px; color:#4C3C6E;">ms</span></div>
             <div class="kpi-subtext">Internet Target (8.8.8.8)</div>
         </div>
         """, unsafe_allow_html=True)
@@ -72,7 +72,7 @@ def render_live_monitor(latest_df: pd.DataFrame, probes_df: pd.DataFrame, active
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-label">RFC 3550 Jitter</div>
-            <div class="kpi-value">{jit_str} <span style="font-size:14px; color:#A6E3E9;">ms</span></div>
+            <div class="kpi-value">{jit_str} <span style="font-size:14px; color:#4C3C6E;">ms</span></div>
             <div class="kpi-subtext">Delay Variance IPDV</div>
         </div>
         """, unsafe_allow_html=True)
@@ -83,7 +83,7 @@ def render_live_monitor(latest_df: pd.DataFrame, probes_df: pd.DataFrame, active
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-label">Rolling Packet Loss</div>
-            <div class="kpi-value">{loss:.1f} <span style="font-size:14px; color:#A6E3E9;">%</span></div>
+            <div class="kpi-value">{loss:.1f} <span style="font-size:14px; color:#4C3C6E;">%</span></div>
             <div class="kpi-subtext">Multi-Probe Window</div>
         </div>
         """, unsafe_allow_html=True)
@@ -99,26 +99,27 @@ def render_live_monitor(latest_df: pd.DataFrame, probes_df: pd.DataFrame, active
         """, unsafe_allow_html=True)
     with c7:
         health = latest.get("health_score", 100.0)
-        h_color = "#71C9CE" if health >= 75 else ("#F9C74F" if health >= 50 else "#F94144")
+        h_color = "#2E7D32" if health >= 75 else ("#D97706" if health >= 50 else "#DC2626")
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-label">Network Health Score</div>
-            <div class="kpi-value" style="color:{h_color};">{health:.1f} <span style="font-size:14px; color:#A6E3E9;">/100</span></div>
+            <div class="kpi-value" style="color:{h_color};">{health:.1f} <span style="font-size:14px; color:#4C3C6E;">/100</span></div>
             <div class="kpi-subtext">Explainable Weighted Index</div>
         </div>
         """, unsafe_allow_html=True)
     with c8:
         stab = latest.get("stability_score", 100.0)
-        s_color = "#71C9CE" if stab >= 70 else ("#F9C74F" if stab >= 50 else "#F94144")
+        s_color = "#6A2D94" if stab >= 70 else ("#D97706" if stab >= 50 else "#DC2626")
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-label">Network Stability Score</div>
-            <div class="kpi-value" style="color:{s_color};">{stab:.1f} <span style="font-size:14px; color:#A6E3E9;">/100</span></div>
+            <div class="kpi-value" style="color:{s_color};">{stab:.1f} <span style="font-size:14px; color:#4C3C6E;">/100</span></div>
             <div class="kpi-subtext">Longitudinal Variance Index</div>
         </div>
         """, unsafe_allow_html=True)
 
     # Real-Time Telemetry Streaming Charts
+    from dashboard.styles import apply_plotly_theme
     col_chart1, col_chart2 = st.columns(2)
 
     with col_chart1:
@@ -129,29 +130,21 @@ def render_live_monitor(latest_df: pd.DataFrame, probes_df: pd.DataFrame, active
             y=latest_df["download_mbps"],
             name="Download (Mbps)",
             mode="lines+markers",
-            line=dict(color="#71C9CE", width=2.5),
+            line=dict(color="#7B32A8", width=2.5),
             fill="tozeroy",
-            fillcolor="rgba(113, 201, 206, 0.15)"
+            fillcolor="rgba(205, 170, 234, 0.25)"
         ))
         fig_tput.add_trace(go.Scatter(
             x=latest_df["timestamp"],
             y=latest_df["upload_mbps"],
             name="Upload (Mbps)",
             mode="lines+markers",
-            line=dict(color="#A6E3E9", width=2, dash="dot"),
+            line=dict(color="#2563EB", width=2, dash="dot"),
             fill="tozeroy",
-            fillcolor="rgba(166, 227, 233, 0.08)"
+            fillcolor="rgba(203, 223, 252, 0.2)"
         ))
-        fig_tput.update_layout(
-            template="plotly_dark",
-            paper_bgcolor="rgba(0,0,0,0)",
-            plot_bgcolor="rgba(17,32,45,0.5)",
-            margin=dict(l=10, r=10, t=20, b=20),
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-            height=280,
-            xaxis=dict(showgrid=False),
-            yaxis=dict(showgrid=True, gridcolor="rgba(113,201,206,0.1)", title="Mbps")
-        )
+        apply_plotly_theme(fig_tput)
+        fig_tput.update_layout(height=280)
         st.plotly_chart(fig_tput, use_container_width=True)
 
     with col_chart2:
@@ -162,25 +155,17 @@ def render_live_monitor(latest_df: pd.DataFrame, probes_df: pd.DataFrame, active
             y=latest_df["latency_ms"],
             name="Latency RTT (ms)",
             mode="lines+markers",
-            line=dict(color="#CBF1F5", width=2)
+            line=dict(color="#6A2D94", width=2.5)
         ))
         fig_lat.add_trace(go.Scatter(
             x=latest_df["timestamp"],
             y=latest_df["jitter_ms"],
             name="Jitter (ms)",
             mode="lines",
-            line=dict(color="#F9C74F", width=2, dash="dash")
+            line=dict(color="#D97706", width=2, dash="dash")
         ))
-        fig_lat.update_layout(
-            template="plotly_dark",
-            paper_bgcolor="rgba(0,0,0,0)",
-            plot_bgcolor="rgba(17,32,45,0.5)",
-            margin=dict(l=10, r=10, t=20, b=20),
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-            height=280,
-            xaxis=dict(showgrid=False),
-            yaxis=dict(showgrid=True, gridcolor="rgba(113,201,206,0.1)", title="ms")
-        )
+        apply_plotly_theme(fig_lat)
+        fig_lat.update_layout(height=280)
         st.plotly_chart(fig_lat, use_container_width=True)
 
     # Multi-Target Probes Matrix

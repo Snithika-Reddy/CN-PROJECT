@@ -21,17 +21,17 @@ def render_network_health(latest_df: pd.DataFrame):
     c1, c2 = st.columns(2)
     with c1:
         st.markdown(f"""
-        <div class="kpi-card" style="border-left: 4px solid #71C9CE;">
+        <div class="kpi-card" style="border-left: 5px solid #CDAAEA;">
             <div class="kpi-label">Current Network Health Score</div>
-            <div class="kpi-value">{health:.1f} <span style="font-size:16px; color:#A6E3E9;">/ 100</span></div>
+            <div class="kpi-value">{health:.1f} <span style="font-size:16px; color:#4C3C6E;">/ 100</span></div>
             <div class="kpi-subtext">Answers: <em>'How good is the network right now?'</em></div>
         </div>
         """, unsafe_allow_html=True)
     with c2:
         st.markdown(f"""
-        <div class="kpi-card" style="border-left: 4px solid #CBF1F5;">
+        <div class="kpi-card" style="border-left: 5px solid #C4BFF0;">
             <div class="kpi-label">Current Network Stability Score</div>
-            <div class="kpi-value">{stability:.1f} <span style="font-size:16px; color:#A6E3E9;">/ 100</span></div>
+            <div class="kpi-value">{stability:.1f} <span style="font-size:16px; color:#4C3C6E;">/ 100</span></div>
             <div class="kpi-subtext">Answers: <em>'How consistently does it behave over time?'</em></div>
         </div>
         """, unsafe_allow_html=True)
@@ -61,34 +61,28 @@ def render_network_health(latest_df: pd.DataFrame):
             """, unsafe_allow_html=True)
 
     st.markdown(f"""
-    <div style="background:rgba(17,32,45,0.7); padding:12px 18px; border-radius:8px; border-left:3px solid #71C9CE; margin-top:8px;">
-        <span style="color:#71C9CE; font-weight:600;">Diagnosis Summary:</span>
-        <span style="color:#E3FDFD;"> {eval_res.explanation}</span>
+    <div class="palette-banner">
+        <span style="color:#763B9E; font-weight:700;">Diagnosis Summary:</span>
+        <span style="color:#15112B; font-weight:600;"> {eval_res.explanation}</span>
     </div>
     """, unsafe_allow_html=True)
 
     # Health & Stability Longitudinal Trend
+    from dashboard.styles import apply_plotly_theme
     st.markdown('<div class="section-title">Health vs. Stability Longitudinal Trend</div>', unsafe_allow_html=True)
     fig_hs = go.Figure()
     fig_hs.add_trace(go.Scatter(
         x=latest_df["timestamp"],
         y=latest_df["health_score"],
         name="Health Score (0-100)",
-        line=dict(color="#71C9CE", width=2.5)
+        line=dict(color="#7B32A8", width=2.5)
     ))
     fig_hs.add_trace(go.Scatter(
         x=latest_df["timestamp"],
         y=latest_df["stability_score"],
         name="Stability Score (0-100)",
-        line=dict(color="#CBF1F5", width=2, dash="dash")
+        line=dict(color="#2563EB", width=2, dash="dash")
     ))
-    fig_hs.update_layout(
-        template="plotly_dark",
-        paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(17,32,45,0.5)",
-        margin=dict(l=10, r=10, t=20, b=20),
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-        height=320,
-        yaxis=dict(range=[0, 105], showgrid=True, gridcolor="rgba(113,201,206,0.1)", title="Score")
-    )
+    apply_plotly_theme(fig_hs)
+    fig_hs.update_layout(height=320, yaxis=dict(range=[0, 105], title="Score"))
     st.plotly_chart(fig_hs, use_container_width=True)

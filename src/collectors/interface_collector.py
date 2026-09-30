@@ -34,8 +34,32 @@ class InterfaceCollector:
 
     def get_all_interfaces(self) -> dict[str, InterfaceInfo]:
         """Query psutil for all network interfaces and hardware statistics."""
-        addrs = psutil.net_if_addrs()
-        stats = psutil.net_if_stats()
+        import time
+        addrs = {}
+        stats = {}
+        for _ in range(3):
+            try:
+                addrs = psutil.net_if_addrs()
+                break
+            except Exception as e:
+                time.sleep(0.1)
+
+        for _ in range(3):
+            try:
+                stats = psutil.net_if_stats()
+                break
+            except Exception as e:
+                time.sleep(0.1)
+
+        # Fallback if psutil interface syscall failed completely
+        if not addrs:
+            try:
+                io_keys = list(psutil.net_io_counters(pernic=True).keys())
+                for k in io_keys:
+                    addrs[k] = []
+            except Exception:
+                addrs["Default Interface"] = []
+
         results: dict[str, InterfaceInfo] = {}
 
         for iface_name, addr_list in addrs.items():
@@ -99,7 +123,10 @@ class InterfaceCollector:
             return all_ifaces[manual_name]
 
         # 2. Check traffic counters to find which interface is actually moving packets
-        io_counters = psutil.net_io_counters(pernic=True)
+        try:
+            io_counters = psutil.net_io_counters(pernic=True)
+        except Exception:
+            io_counters = {}
         candidates: list[tuple[InterfaceInfo, int]] = []
 
         for name, info in all_ifaces.items():

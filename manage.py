@@ -238,6 +238,25 @@ def cmd_status(args):
             print(f"  {csv_file.name:<28} : {size_kb:>6.1f} KB (Updated: {mtime})")
 
 
+def cmd_report(args):
+    """Generate comprehensive intelligence and viva reports to output/ directory."""
+    from src.storage.database import DatabaseManager
+    from src.reporting.report_generator import ReportGenerator
+
+    print("[*] Generating NetIntel evaluation & intelligence reports...")
+    db = DatabaseManager()
+    rep = ReportGenerator(db)
+    results = rep.export_all_outputs(output_dir=args.outdir)
+
+    print(f"\n[+] Successfully generated output artifacts in '{args.outdir}/':")
+    for key, path in results.items():
+        print(f"    - {key:<24}: {path}")
+
+    txt_path = results.get("telemetry_summary_txt")
+    if txt_path and Path(txt_path).exists():
+        print("\n" + Path(txt_path).read_text(encoding="utf-8"))
+
+
 def main():
     parser = argparse.ArgumentParser(description="NetIntel Real-Time Network Intelligence Platform")
     subparsers = parser.add_subparsers(dest="command", help="Command to execute")
@@ -279,6 +298,10 @@ def main():
     # status
     subparsers.add_parser("status", help="Print system & telemetry status")
 
+    # report
+    p_rep = subparsers.add_parser("report", help="Generate comprehensive intelligence & viva report into output/")
+    p_rep.add_argument("--outdir", default="output", help="Target output directory")
+
     args = parser.parse_args()
 
     if not args.command:
@@ -296,6 +319,7 @@ def main():
         "simulate": cmd_simulate,
         "test": cmd_test,
         "status": cmd_status,
+        "report": cmd_report,
     }
 
     fn = dispatch.get(args.command)
